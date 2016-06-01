@@ -6,6 +6,15 @@ Articles Index
 Robustness in embedded software
 ===============================
 
+Embedded software is defined by:
+- lack of human interaction.
+- long, unattended lifetime.
+- many units, built-to-a-cost, therefore resource constrained in RAM, storage and performance.
+- often low power requirements.
+- Often interacting with remote systems via messaging interfaces.
+Implemented correctly, these techniques can provide significant improvements in robustness over unprotected code.
+
+
 - Accidental corruption.
     stack overflow
     stack underlow

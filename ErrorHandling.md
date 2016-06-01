@@ -11,4 +11,5 @@ Error Handling.
 - Corruption prevention
 - Corrupted state.
 - 2nd, 3rd and 4th order effects.
+- Erlang-style.
 

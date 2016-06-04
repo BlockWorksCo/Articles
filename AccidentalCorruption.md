@@ -1,55 +1,78 @@
 
 
 
-Accidental corruption.
-======================
+# Accidental corruption.
 
-Corruption can take many forms in a typical C/microcontroller software system, namely:
+Considering your typical C and microcontroller based embedded application, corruption can be caused in many ways.
 
-- stack overflow
-    incorrect array bounds.
-    incorrect sizing.
-    stack pointer corruption.
+Regardless of the root-cause, if corruption is detected, the only course of action is an immediate PANIC situation. Why do we PANIC? because we cannot now trust the machine state. At the point of detection we cannot know what else has been affected and for how long, therfore the only safe thing to do is PANIC our way back to safety.
 
-- stack underflow
-    incorrect array bounds.
-    stack pointer corruption.
+Above all, we *must* avoid persisting any data to FLASH or EEPROM at this point as we cannot determine if it is still valid. If we have the facility to do so, we must mark any recently persisted data as untrustworthy to cause a rollback to a last-known-good state.
 
-- stack corruption
-    difficult to detect.
-    canaries, -fstack-check
+Without further ado, lets have a look at the common sources of RAM corruption.
 
-- heap corruption
+## Stack overflow
+This condition occurs when too much data is pushed onto the stack. Without an MPU/MMU to detect this siutation, the processor will not immediately raise an exception but instead will continue on blindly overwriting whatever data is immediately adjacent to the stack.
+### Detection
+Detecting a stack overflow situation is relatively easy as there are telltale signs, namely:
+- The stack pointer is past the end of stack.
+- The contents of the stack area are relatively random, indicating the stack has actually been used. Beware though that if the cause of the corruption is a large array or structure on the stack then this may appear to be empty space (filled with the stack-fill value).
+This can be caught during runtime by instrumentation of the code or via checks at context-switch time. Relying on the OS to detect this at context switch time is less preferable to instrumented checking as it only checks periodically. Instrumented checks can catch the root-cause more easily though with more performance overhead.
+### Causes & Resolutions
+- The obvious cause here is incorrect sizing of the stack. Although it is tempting to simply increase the size of the stack, RAM is typically a limited resource in embedded systems and as such should be conserved. Instead, try to identify the reason that a large amount of stack space is being allocated on the stack and ask whether it really needs to be.
+- Recursion; rarely is this intended and is unwise in an embedded system with limited stack space. Refactor the code to avoid recursion.
+- Incorrect array indexing; if a local array is indexed by for example, a negative value then this will not be trapped. Instead the data that lies adjacent to the array will be corrupted. This can cause secondary effect such as stack pointer corruption, data corruption and return-address corruption.
+- Always remember that all these effects can be secondary effects of other types of corruption, for example stack pointer corruption would potentially also place the stack pointer outside of the stack making it (incorrectly) appear as though there is too much data on the stack.
+
+## Stack underflow
+Similar to the stack overflow situation, but this is in the other direction, i.e. it appears that too much data has been taken *off* the stack. This results in the stack pointer ending up *below* the start of the stack.
+The lack of an MPU/MMU means that the accesses *below* the stack are not trapped but instead are allowed to corrupt the data.
+### Detection
+This can be caught with at runtime with the same techniques as the overflow situation, namely instrumented code on entry/exit to functions and OS checking at context switch time.
+### Causes & Resolutions
+In contrast to the overflow situation, underflow cannot occur in the normal running of the application. This is because "pop" operations are always matched to "push" operations.
+For this reason, it should be considered a secondary effect, i.e. the root cause will always be another issue such as incorrect indexed local arrays corrupting a link-register.
+
+
+##  Stack data corruption
+Although the underflow and overflow situations can be considered sstack corruption, here we are considering the data itself that resides on the stack rather than the stack metadata (SP and LR).
+
+### Detection
+difficult to detect.
+canaries, -fstack-check
+
+### Causes & Resolutions
+
+## Heap corruption
     use-after-free
     dangling pointers from e.g. linked lists & trees.
 
-- heap metadata corruption.
+## heap metadata corruption.
     use-after-free.
 
-- Heap leaking.
+## Heap leaking.
     misplaced free.
     missing free.
 
-- static buffer corruption.
+## static buffer corruption.
     debugger & watchpoints
     CRC of buffer can provide detection.
 
-- Pointer arithmetic.
+## Pointer arithmetic.
     pointer checks.
     address range is well-defined.
     range is further narrowed by Domain Protection.
 
-- Attempt to trap fault as close as possible to the original fault.
+## Attempt to trap fault as close as possible to the original fault.
     instrumentation.
     dedicated and specific checking code.
     instruction tracing.
     write-buffering causing loss of precision in fault catching.
 
-- Concurrency as a source of corruption.
+## Concurrency as a source of corruption.
     shared data.
     atomic access.
     multiprocessors & caching (invalidation, flushing and non-cached areas).
     interrupts.
     DMA transferring data into incorrect location.
     per-task heap? reduce contention & synchronisation overhead.
-

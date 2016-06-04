@@ -38,10 +38,15 @@ For this reason, it should be considered a secondary effect, i.e. the root cause
 Although the underflow and overflow situations can be considered sstack corruption, here we are considering the data itself that resides on the stack rather than the stack metadata (SP and LR).
 
 ### Detection
-difficult to detect.
-canaries, -fstack-check
+The difficulty here is that the data on the stack can be modified in a perfectly legal and normal manner when passing data into a function by reference.
+Assuming that the corruption is not malicious (and hence targetted), then implementing canary values in local data does have some chance of catching this situtation. Unfortunately, I know of no current compiler that will place canaries around local data automatically, leaving it up to the programmer to implement this manually.
+
+This issue is inherently difficult (almost impossible) to detect, even with an MPU/MMU in larger systems.
 
 ### Causes & Resolutions
+Limiting the use of pass-by-reference, possibly by coding standards and code review will go someway to making this more detectable in an automated way. An extended version of the Domain Protection system can enforce no passing-by-reference when crossing domains by using the MPU to make only the stack area for the current domain accessible. This is not a complete solution tho.
+
+Further complicating the matter is that this may also be asecondary level effect of another type of corruption.
 
 ## Heap corruption
     use-after-free

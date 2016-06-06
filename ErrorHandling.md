@@ -11,17 +11,43 @@ You cannot discuss error handling without also discussing recovery. Detecting th
 ## Definition of an error.
 A condition outside of the designed-for program logic.
 
-If your system as a whole (not just the software) can *truly* contain and accept the condition, the let it do so. All other situations are not acceptable and indicate undefined program-state (either malicious or accidental).
+If your system as a whole (not just the software) can *truly* contain and accept the condition, then let it do so. All other situations are not acceptable and indicate undefined program-state (either malicious or accidental).
+
+What this means is that an "error" is an occurrence that puts the system "out of spec", i.e. in a state that it was not designed to handle. What we *don't* want to do is to invent our own behaviour that we think should occur for each of these situations. This would lead to:
+- Non-deterministic behaviour; no one outside of your team will know how the device will behave in these circumstances.
+- Mixtures of behaviour in similar circumstances as different people implement recovery in different ways.
+- Varying quality of recovery as some people consider the larger system and others dont.
+
+So, what we are saying is that correct error recovery *has* to be specified up front. Anything that is specified can be agreed upon by everyone involved and can be considered in the context of the *whole* system.
+
+Every condition that is not specified can be considered an error and its recovery behaviour should not be 'guessed' at.
 
 
 ### Assertions
-An assertion that fails yet does not stop the system is then creating undefined state. Therefore assertions *must* stop the system.
-This is the exact same behaviour as errors. therefore assertion === error. In effect an assertion declares that the following logic can handle values in the given range.
+Assertions are sometimes considered differently from "real" errors in that sometimes they are allowed to fail. This is not a valid thing to allow happen.
+
+An assertion that fails yet does not stop the system is then creating undefined state. Therefore assertions *must* stop the system or risk further errors, possible corruption of data and incorrect results.
+
+This is the exact same behaviour as errors. Therefore assertion === error. In effect an assertion declares that the program logic that follows it can handle values in the specified range.
 
 Failure to supply that code with values in that range results in undefined behaviour.
 
 See also: Design by contract.
 
+### What an error isnt.
+According to the above definition, if your program logic is designed to handle a particular value, then by definition it cannot be an error.
+Although this sounds odd, what we are effectively saying here is that what we are terming "errors" are in effect "errors with no specified behaviour that we can implement".
+
+Taking this reasoning to its logical conclusion gives us the following:
+- "Errors" have no defined behaviour.
+- Faults that we have a mechanism for handling within the context of the whole system are not "errors".
+
+### Examples.
+- Parity failure on UART link. Not an error if our protocol provides detection and retries. Error otherwise.
+- Failure to 'give' a semaphore. Error. There is typically no specified behaviour for this occurrence.
+- Failure to erase a FLASH block. Not an error if we have bad-block-management code. Error otherwise.
+- Storage full. An error if we have no specified way of handling this.
+- CRC failure on program image. Error unless there is a mechanism for restoring the image.
 
 ## What is different about embedded systems?
 Embedded systems have a few qualities that mean the techniques for handling errors should be different to those on server or desktop systems:
@@ -70,7 +96,7 @@ As an example of this mentality is in the telecoms systems written in Erlang. Th
 This goes against the grain for a log of engineers
 
 "If a hardware failure requires any immediate administrative action, the service simply won’t scale cost-effectively and reliably. The entire service must be capable of surviving failure without human administrative interaction. Failure recovery must be a very simple path and that path must be tested frequently. Armando Fox of Stanford has argued that the best way to test the failure path is never to shut the service down normally. Just hard-fail it. This sounds counter-intuitive, but if the failure paths aren’t frequently used, they won’t work when needed."
-(James Hamilton https://www.usenix.org/legacy/event/lisa07/tech/full_papers/hamilton/hamilton_html/)
+(James Hamilton) https://www.usenix.org/legacy/event/lisa07/tech/full_papers/hamilton/hamilton_html/
 
 ## Strategies
 

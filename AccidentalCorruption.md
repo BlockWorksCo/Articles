@@ -44,13 +44,26 @@ Assuming that the corruption is not malicious (and hence targetted), then implem
 This issue is inherently difficult (almost impossible) to detect, even with an MPU/MMU in larger systems.
 
 ### Causes & Resolutions
-Limiting the use of pass-by-reference, possibly by coding standards and code review will go someway to making this more detectable in an automated way. An extended version of the Domain Protection system can enforce no passing-by-reference when crossing domains by using the MPU to make only the stack area for the current domain accessible. This is not a complete solution tho.
+Limiting the use of pass-by-reference, possibly by coding standards and code review will go someway to making this more detectable in an automated way. An extended version of the Domain Protection system can enforce no passing-by-reference when crossing domains by using the MPU to make only the stack area for the current domain accessible. This is not a complete solution though.
 
-Further complicating the matter is that this may also be asecondary level effect of another type of corruption.
+Further complicating the matter is that this may also be a secondary level effect of another type of corruption.
 
-## Heap corruption
-    use-after-free
-    dangling pointers from e.g. linked lists & trees.
+## Heap data corruption
+Data can also be corrupted while in the heap, but this is typically a secondary effect, i.e. the root cause is another problem such as incorrect pointer arithmetic or bad array indexing.
+
+Since buffers allocated from the heap are not protected from each other in anyway whatsoever, they are susceptible to incorrect dereferencing in neighbouring buffers.
+
+### Detection
+There is no real telltale sign that heap data has been corrupted other than what you yourself can detect manually.
+
+### Causes and resolutions
+One mechanism to prevent heap issues is to prevent use of  pointers into the heap directly.
+
+use-after-free can appear to corrupt data whereas the real cause is misuse of the heap.
+Accessing the heap through functions rather than directly gives you a single point to verify accesses.
+Language design can help here, for example C++ vectors are an improvement here due to bounds checking.
+
+dangling pointers from e.g. linked lists & trees.
 
 ## heap metadata corruption.
     use-after-free.
@@ -81,3 +94,14 @@ Further complicating the matter is that this may also be asecondary level effect
     interrupts.
     DMA transferring data into incorrect location.
     per-task heap? reduce contention & synchronisation overhead.
+
+
+
+# Detection mechanisms in detail.
+Here, we will discuss the detail of the corruption detection mechanisms:
+
+## Stack filling
+
+## Code instrumentation for stack check.
+
+## Manual canary values for local data.

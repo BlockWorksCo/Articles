@@ -14,6 +14,8 @@ First and foremost, we must acknowledge that our one subsystem is not isolated. 
 
 You cannot discuss error handling without also discussing recovery. Detecting that an error has happened and not attempting recovery does not a fault tolerant system make.
 
+![Example image](/posts/ErrorHandling.svg)
+
 ## Definition of an error.
 A condition outside of the designed-for program logic.
 

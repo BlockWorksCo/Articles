@@ -3,8 +3,6 @@ title: "Architecture"
 date: 2019-01-20T19:14:13Z
 draft: false
 ---
-
-
 Architecture
 ============
 - Assumptions for embedded-code. one-use, running forever (barring upgrades and resets), limited resources (RAM, performance, power, space).

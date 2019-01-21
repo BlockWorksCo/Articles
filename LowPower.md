@@ -3,7 +3,7 @@ title: "LowPower"
 date: 2019-01-21T17:30:54Z
 showDate: true
 draft: false
-tags: ["blog","story"]
+tags: ["low power"]
 ---
 
 # Characteristics of low-power systems

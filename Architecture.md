@@ -1,5 +1,5 @@
 ---
-title: "Architecture"
+title: "Architecture for embedded systems"
 date: 2019-01-20T19:14:13Z
 draft: false
 ---

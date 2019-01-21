@@ -1,7 +1,7 @@
 ---
 title: "Low power software architecture"
 date: 2019-01-21T17:30:54Z
-showDate: true
+showDate: false
 draft: false
 tags: ["low power"]
 ---
@@ -54,16 +54,17 @@ so their life has to be predicted. This requires knowing *exactly* how the devic
 # Trade offs
 * Storage versus communication.
 * Deep-sleep versus startup/shutdown duration.
+* Fine-grained vs large-grained wake-cycle.
 
 
-# Radio communications and low-power software.
+# Radio communications.
 * Appropriate data rate for application.
 * Choice of protocol (ZigBee, 6LoWPAN, LoRAWAN, etc).
 * Topology; mesh versus star.
 * Routing complexity versus efficiency.
 
 
-# Common patterns that are inappropriate for low-power software
+# Inappropriate common patterns. 
 * Filesystems; over-generic and complex.
 * Concurrency; overhead of context-switching is wasted energy.
 * Abstractions; every wasted instruction is wasted energy. For example, monitor the call-stack depth to identify over-abstracted code.

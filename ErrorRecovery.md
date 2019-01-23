@@ -127,25 +127,25 @@ bool myFoo(int input)
                 }
                 else
                 {
-                    LOG_ERROR("callback not set!");
+                    maybeCallADefault();
                     return false;
                 }
             }
             else
             {
-                LOG_ERROR("date hasn't been set!");
+                tryAndRecover();
                 return false;
             }
         }
         else
         {
-            LOG_ERROR("input too great!");
+            someRecoveryAction();
             return false;
         }
     }
     else
     {
-        LOG_ERROR("input too small!");
+        anotherRecoveryAction();
         return false;
     }
 }
@@ -157,8 +157,8 @@ void myFoo(int input)
 {
     PANIC_IF( input<0, "input too small!" );
     PANIC_IF( input>=100, "input too great!" );
-    PANIC_IF( theData == NULL, "data hasn't been set!" );
-    PANIC_IF( theCallback == NULL, "callback hasn't been set!" );
+    PANIC_IF( theData == NULL, "data not set!" );
+    PANIC_IF( theCallback == NULL, "fn not set");
 
     theCallback( theData );
 }

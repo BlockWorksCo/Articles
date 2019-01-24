@@ -59,6 +59,10 @@ Instead we can in certain conditions accumulate the estimated consumption for th
 This will naturally be more inaccurate but may provide a more grudualand useful estimation as the battery ages.
 
 
+# Clock drift.
+
+Crystals and oscillators drive clocks but these are subject to aging.
+
 
 
 

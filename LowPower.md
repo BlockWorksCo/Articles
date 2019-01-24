@@ -37,8 +37,6 @@ needs to be performed. Note that this is *before* normal initialisation.
 * Store any required data in the most appropriate place (RAM?, EEPROM?, FLASH?)
 * Setup trigger events for the next wake-period.
 * Enter low-power-mode or turn off.
-* Timeouts need to be short and appropriate. Think what condition you're trying to catch. You don't want to stay awake waiting for
-an event that will never happen.
 
 # Application-level design for low-power systems
 
@@ -51,6 +49,8 @@ are tradeoffs aplenty here.
 * Deterministic behaviour; Being predictable is important in order to be able to predict battery-life. This requires
 a known current-draw from the system. Often, the charactersistics of batteries power-loss are not able to be monitored
 so their life has to be predicted. This requires knowing *exactly* how the device behaves.
+* Timeouts need to be short and appropriate. Think what condition you're trying to catch. You don't want to stay awake waiting for
+an event that will never happen.
 
 
 # Trade offs

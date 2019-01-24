@@ -4,7 +4,10 @@ date: 2019-01-22T22:26:21Z
 draft: false
 ---
 
-Considering error conditions in a single-purpose, embedded system:
+Considering a typical single-purpose, embedded system, likely running a microcontroller:
+
+
+What happens when we detect a fault condition?
 
 - No user interaction is allowed, therefore recovery needs to be automatic.
 - Worst case: software is not running, so hardware watchdog fallback is necessary.
@@ -12,13 +15,13 @@ Considering error conditions in a single-purpose, embedded system:
 recovery mechanism.
 - During development, we can turn off watchdog and busy-wait allowing an opportunity for a debugger to attach. This
 preserves processor state (stacks & RAM contents) for examination.
-- Boot time must be minimised as this is now a normal recovery mechanism.
+- Boot time is typically very quick (100's of ms) and must be minimised as this is now a normal recovery mechanism.
 - Low-power wake-cycle is also a natural reset-cycle and also requires boot time to be minimised.
 
 
 # Live recovery
-Recovery using normal program control flow (i.e. without resets).
-
+Live recovery is attempting to handle recovery using normal program control flow (i.e. without resets).
+This typically leads to deep highly nested code flow as eachkm 
 
 # Reset recovery.
 Recovery using the reset mechanism to clear bad state. This is performed by the PANIC call.
@@ -65,6 +68,14 @@ void PANIC( const char* message,
 The intention is that the above code will be called from any assert failures or exception handlers
 where live-recovery is not an option.
 
+# How do we persist data across a reset?
+
+* In linker, allocate a 'noinit' RAM location.
+* In PANIC(), copy the error message into the noinit area.
+* On startup, examine the noinit area for any messages and examine the startup flags for watchdog indication.
+
+# Benefits
+
 Normalisation of the reset path seems antithetical to good software development practice, but in fact it is not.
 There are numerous benefits:
 
@@ -100,6 +111,7 @@ being unused (most of the time).
 
 # Debugging a fault
 
+* Detect fault condition.
 * Call PANIC.
 * Attach debugger.
 * Pause processor.
@@ -163,6 +175,14 @@ void myFoo(int state)
     theCallback( theData );
 }
 ~~~~~~~~
+
+
+# How do we make this testable?
+
+We need to be able to test these paths, so how can we do this?
+
+
+
 
 
 

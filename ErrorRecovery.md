@@ -43,8 +43,8 @@ void PANIC( const char* message,
     // Don't let anything else run.
     disableInterrupts();
 
-    // Log message for startup routine to output
-    memcpy(&noInitMessage, message, messageLength);
+    // Log message to be output at startup
+    memcpy(&noInitMsg, message, messageLength);
 
     // Don't allow the compiler to optimise out 
     // the return code.

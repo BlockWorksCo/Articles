@@ -37,6 +37,8 @@ needs to be performed. Note that this is *before* normal initialisation.
 * Store any required data in the most appropriate place (RAM?, EEPROM?, FLASH?)
 * Setup trigger events for the next wake-period.
 * Enter low-power-mode or turn off.
+* Timeouts need to be short and appropriate. Think what condition you're trying to catch. You don't want to stay awake waiting for
+an event that will never happen.
 
 # Application-level design for low-power systems
 
@@ -64,7 +66,7 @@ so their life has to be predicted. This requires knowing *exactly* how the devic
 * Routing complexity versus efficiency.
 
 
-# Inappropriate common patterns. 
+# Inappropriate common patterns.
 * Filesystems; over-generic and complex.
 * Concurrency; overhead of context-switching is wasted energy.
 * Abstractions; every wasted instruction is wasted energy. For example, monitor the call-stack depth to identify over-abstracted code.

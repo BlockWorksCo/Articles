@@ -112,11 +112,11 @@ back into the faulting-code.
 
 ## Live recovery
 ~~~~~~~~
-bool myFoo(int input)
+bool myFoo(int state)
 {
-    if(input > 0)
+    if(state > 0)
     {
-        if(input < 100)
+        if(state < 100)
         {
             if(theData != NULL)
             {
@@ -153,10 +153,10 @@ bool myFoo(int input)
 
 ## Reset-recovery
 ~~~~~~~~
-void myFoo(int input)
+void myFoo(int state)
 {
-    PANIC_IF( input<0, "input too small!" );
-    PANIC_IF( input>=100, "input too great!" );
+    PANIC_IF( state<0, "state out-of-range!" );
+    PANIC_IF( state>=100, "input out-of-range" );
     PANIC_IF( theData == NULL, "data not set!" );
     PANIC_IF( theCallback == NULL, "fn not set");
 

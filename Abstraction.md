@@ -1,7 +1,7 @@
 ---
 title: "Abstraction"
 date: 2019-01-27T08:19:18Z
-draft: true
+draft: false
 ---
 
 
@@ -19,6 +19,12 @@ Abstractions should provide value for the business, because they typically harm 
 
 "All problems in computer science can be solved by another level of indirection, except for the problem of too many layers of indirection." – David J. Wheeler
 
+Frameworks vs libraries
+Look behind the API, understand how its working.
+
+
+When making a suit, a good Tailor will always leave a small amount of fabric at strategic locations within the garment to allow the garment to be taken in, or out, without changing its overall shape or structure.
+Good Tailor's don't leave reams of fabric at each seam just incase you happen to grow a third arm, or become pregnant.
 
 # Summary:
 

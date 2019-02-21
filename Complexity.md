@@ -18,6 +18,7 @@ This is the complexity of the problem domain. You cannot do anything to change t
 
 The accidental complexity of a task on the other hand is a statement about how much complexity your solution has added on top of the
 inherent complexity.
+A better phrase maybe "implementation complexity".
 
 We, as software developers directly influence (and cause) the complexity, so it is up to us to attempt to minimise it.
 
@@ -127,6 +128,15 @@ At each stage, we add seemingly harmless concepts and assumed-knowledge, all in 
 is that we've added significant amounts of complexity. Admit it, you couldn't glance at the last example and grok it could you?
 Whereas the first you simply absorbed without thought.
 The first example can be read in your sleep. The last example on the other hand requires significant thought, even for this trivial example.
+
+
+
+------------------------
+
+# Architectural complexity
+
+Above, we described the complexity of a particular implementation.
+The architecture of the software (and system) as a whole also need to be taken into account.
 
 --------------------
 

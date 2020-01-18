@@ -16,9 +16,9 @@ two stacks
 
 Cortex-M example bug other architectures are similar.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{< highlight cpp "" >}}
 
-vois HardFault_Handler()
+void HardFault_Handler()
 {
 #ifdef DEBUG
 
@@ -49,7 +49,7 @@ vois HardFault_Handler()
 #endif
 }
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{{< / highlight >}}
 
 
 

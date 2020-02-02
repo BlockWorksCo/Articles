@@ -1,5 +1,5 @@
 ---
-title: "Abstraction"
+title: "The right amount of abstraction"
 date: 2019-01-27T08:19:18Z
 draft: false
 ---
